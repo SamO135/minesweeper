@@ -8,7 +8,7 @@ import java.util.Vector;
 
 public class Cell {
     private Texture image;
-    private Sprite sprite;
+    public Sprite sprite;
     public int number;
     public boolean isMine;
 
@@ -20,9 +20,6 @@ public class Cell {
     }
 
     public void render(SpriteBatch spriteBatch){
-        if (isMine){
-            changeTexture("mine_cell.png");
-        }
         sprite.draw(spriteBatch);
     }
 

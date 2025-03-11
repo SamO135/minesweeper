@@ -32,7 +32,10 @@ public class Grid {
             int randX = (int)(Math.random() * gridWidth);
             int randY = (int)(Math.random() * gridHeight);
             if (!grid[randX][randY].isMine){
-                grid[randX][randY].isMine = true;
+                Cell cell = grid[randX][randY];
+                cell.isMine = true;
+                cell.changeTexture("mine_cell.png");
+                System.out.println(cell.sprite.getX());
                 numMines--;
             }
         }
