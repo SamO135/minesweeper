@@ -11,7 +11,8 @@ public class Cell {
     public Sprite sprite;
     public int number;
     public boolean isMine;
-    private boolean isRevealed;
+    public boolean isRevealed;
+    private boolean isFlagged;
 
 
     public Cell(float x, float y){
@@ -44,11 +45,18 @@ public class Cell {
         isRevealed = true;
     }
 
-    public void flag(){
+    public void toggleFlag(){
         if (isRevealed){
             return;
         }
 
-        changeTexture("cells/flagged_cell.png");
+        if (!isFlagged){
+            changeTexture("cells/flagged_cell.png");
+            isFlagged = true;
+        }
+        else{
+            changeTexture("cells/basic_cell.png");
+            isFlagged = false;
+        }
     }
 }

@@ -21,15 +21,15 @@ public class MyInputProcessor extends InputAdapter {
         if (worldCoordinates.x < 0 || worldCoordinates.x > viewport.getWorldWidth()) {
             return true;
         }
-        int xIndex = (int) worldCoordinates.x;
-        int yIndex = (int) worldCoordinates.y;
-        Cell clickedCell = grid.getCell(xIndex, yIndex);
+        int xCoord = (int) worldCoordinates.x;
+        int yCoord = (int) worldCoordinates.y;
+        Cell clickedCell = grid.getCell(xCoord, yCoord);
 
         switch (button) {
             case (Input.Buttons.LEFT):
-                clickedCell.reveal();
+                grid.reveal(clickedCell);
             case (Input.Buttons.RIGHT):
-                clickedCell.flag();
+                clickedCell.toggleFlag();
         }
         return true;
     }
