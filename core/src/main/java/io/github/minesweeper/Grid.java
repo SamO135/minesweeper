@@ -95,7 +95,7 @@ public class Grid {
             nextCell.reveal();
             System.out.println(nextCell.number);
 
-            if (nextCell.number == 0) {
+            if (nextCell.number == 0 && !nextCell.isMine) {
                 ArrayList<Cell> neighbours = getNeighbours(grid, nextCell);
                 for (Cell neighbour : neighbours){
                     if (!neighbour.isRevealed){
