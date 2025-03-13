@@ -26,9 +26,9 @@ public class GameScreen implements Screen {
 
         // set up camera and world viewport
         this.camera = game.getCamera();
-        this.camera.setToOrtho(false, grid.getGridWidth(), grid.getGridHeight());
+        this.camera.setToOrtho(false, grid.getWidth(), grid.getHeight());
         this.viewport = game.getViewport();
-        this.viewport.setWorldSize(grid.getGridWidth(), grid.getGridHeight());
+        this.viewport.setWorldSize(grid.getWidth(), grid.getHeight());
 
 
     }
@@ -50,6 +50,10 @@ public class GameScreen implements Screen {
 
         if (grid.clickedMine) {
             gameOver();
+        }
+
+        if (grid.getCellsRevealed() >= (grid.getWidth() * grid.getHeight()) - grid.getNumMines()){
+            gameWon();
         }
 
         // render game objects
@@ -87,5 +91,9 @@ public class GameScreen implements Screen {
             }
         }
         game.setScreen(new GameOverScreen(game));
+    }
+
+    private void gameWon() {
+        game.setScreen(new GameWonScreen(game));
     }
 }

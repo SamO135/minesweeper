@@ -3,37 +3,28 @@ package io.github.minesweeper.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.minesweeper.game.MinesweeperGame;
 import io.github.minesweeper.ui.CustomButton;
 
-public class GameOverScreen implements Screen {
-    private final MinesweeperGame game;
+public class GameWonScreen implements Screen {
     private final SpriteBatch spriteBatch;
-    private final Texture gameOverTexture;
-    OrthographicCamera camera;
-    FitViewport viewport;
-
+    private final MinesweeperGame game;
     private final Stage stage;
+    private OrthographicCamera camera;
+    private FitViewport viewport;
 
-    public GameOverScreen(MinesweeperGame game) {
+    public GameWonScreen(MinesweeperGame game) {
         this.game = game;
         spriteBatch = new SpriteBatch();
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-
-        gameOverTexture = new Texture(Gdx.files.internal("game_over_text.png"));
-        Image gameOverImage = new Image(new TextureRegionDrawable(new TextureRegion(gameOverTexture)));
 
         // create play again button
         TextureAtlas buttonAtlas = new TextureAtlas(Gdx.files.internal("buttons/play_again_button/play_again_text.atlas"));
@@ -41,16 +32,15 @@ public class GameOverScreen implements Screen {
 
         // Create UI Table
         Table table = new Table();
-        table.add(gameOverImage).width(8).height(4).padBottom(2);
-        table.row();
         table.add(playAgainButton).width(5).height(2);
         table.setFillParent(true);
         stage.addActor(table);
+
     }
 
     @Override
     public void show() {
-        // set up camera and viewport
+        // set up camera and world viewport
         this.camera = game.getCamera();
         this.camera.setToOrtho(false, game.grid.getWidth(), game.grid.getHeight());
         this.viewport = game.getViewport();
@@ -70,7 +60,7 @@ public class GameOverScreen implements Screen {
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
 
-        // render game grid in the background
+        // render grid
         spriteBatch.begin();
         game.grid.render(spriteBatch);
         spriteBatch.end();
@@ -78,7 +68,6 @@ public class GameOverScreen implements Screen {
         // render UI
         stage.act(delta);
         stage.draw();
-
     }
 
     @Override
@@ -101,12 +90,10 @@ public class GameOverScreen implements Screen {
     @Override
     public void dispose() {
         spriteBatch.dispose();
-        gameOverTexture.dispose();
         stage.dispose();
     }
 
     private void onPlayAgainClick() {
         game.setScreen(new GameScreen(game));
     }
-
 }

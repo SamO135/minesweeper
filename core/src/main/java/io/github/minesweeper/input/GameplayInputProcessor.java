@@ -19,7 +19,6 @@ public class GameplayInputProcessor extends InputAdapter {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 worldCoordinates = viewport.unproject(new Vector3(screenX, screenY, 0));
-        System.out.println(worldCoordinates.x + ", " + worldCoordinates.y);
 
         if (worldCoordinates.x < 0 || worldCoordinates.x > viewport.getWorldWidth()) {
             return true;
@@ -30,7 +29,9 @@ public class GameplayInputProcessor extends InputAdapter {
 
         switch (button) {
             case (Input.Buttons.LEFT):
-                grid.reveal(clickedCell);
+                if (!clickedCell.isRevealed){
+                    grid.reveal(clickedCell);
+                }
             case (Input.Buttons.RIGHT):
                 clickedCell.toggleFlag();
         }

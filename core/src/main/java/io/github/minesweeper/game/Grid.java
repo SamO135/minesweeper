@@ -8,14 +8,17 @@ import java.util.Queue;
 
 public class Grid {
     private final Cell[][] grid;
-    private final int gridWidth;
-    private final int gridHeight;
+    private final int width;
+    private final int height;
+    private final int numMines;
+    private int cellsRevealed;
     public boolean clickedMine;
 
     public Grid(int width, int height, int numMines) {
         grid = new Cell[width][height];
-        gridWidth = width;
-        gridHeight = height;
+        this.width = width;
+        this.height = height;
+        this.numMines = numMines;
         createGrid(width, height);
         placeMines(numMines);
     }
@@ -29,12 +32,12 @@ public class Grid {
     }
 
     public void placeMines(int numMines) {
-        if (numMines > gridWidth * gridHeight) {
-            numMines = gridWidth * gridHeight;
+        if (numMines > width * height) {
+            numMines = width * height;
         }
         while (numMines > 0) {
-            int randX = (int) (Math.random() * gridWidth);
-            int randY = (int) (Math.random() * gridHeight);
+            int randX = (int) (Math.random() * width);
+            int randY = (int) (Math.random() * height);
             if (!grid[randX][randY].isMine) {
                 Cell cell = grid[randX][randY];
                 cell.isMine = true;
@@ -63,7 +66,7 @@ public class Grid {
                 }
                 int newX = xIndex + x;
                 int newY = yIndex + y;
-                if (newX >= 0 && newX < gridWidth && newY >= 0 && newY < gridHeight) {
+                if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
                     neighbours.add(grid[newX][newY]);
                 }
             }
@@ -93,32 +96,46 @@ public class Grid {
 
         Cell nextCell;
         Queue<Cell> queue = new ArrayDeque<>();
+        boolean[][] visited = new boolean[width][height];
         queue.add(clickedCell);
+        visited[(int)clickedCell.sprite.getX()][(int)clickedCell.sprite.getY()] = true;
 
         while (!queue.isEmpty()) {
             nextCell = queue.poll();
             nextCell.reveal();
+            cellsRevealed += 1;
 
             if (nextCell.number == 0 && !nextCell.isMine) {
                 ArrayList<Cell> neighbours = getNeighbours(grid, nextCell);
                 for (Cell neighbour : neighbours){
-                    if (!neighbour.isRevealed){
+                    int neighbourX = (int)neighbour.sprite.getX();
+                    int neighbourY = (int)neighbour.sprite.getY();
+                    if (!visited[neighbourX][neighbourY] && !neighbour.isRevealed) {
                         queue.add(neighbour);
+                        visited[neighbourX][neighbourY] = true;
                     }
                 }
             }
         }
     }
 
-    public int getGridWidth() {
-        return gridWidth;
+    public int getWidth() {
+        return width;
     }
 
-    public int getGridHeight() {
-        return gridHeight;
+    public int getHeight() {
+        return height;
     }
 
     public Cell[][] getGrid() {
         return grid;
+    }
+
+    public int getCellsRevealed() {
+        return cellsRevealed;
+    }
+
+    public int getNumMines() {
+        return numMines;
     }
 }
