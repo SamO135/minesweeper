@@ -3,10 +3,14 @@ package io.github.minesweeper.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.minesweeper.game.MinesweeperGame;
@@ -27,12 +31,17 @@ public class MainMenuScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
 
+        Texture titleText = new Texture(Gdx.files.internal("text/minesweeper_text.png"));
+        Image titleTextImage = new Image(new TextureRegionDrawable(new TextureRegion(titleText)));
+
         TextureAtlas buttonAtlas = new TextureAtlas(Gdx.files.internal("buttons/start_button/start_button.atlas"));
         CustomButton startButton = new CustomButton(buttonAtlas, this::onStartClick);
 
         Table table = new Table();
         table.setFillParent(true);
-        table.add(startButton).width(200).height(60).pad(10);
+        table.add(titleTextImage).width(528).height(48).padBottom(256);
+        table.row();
+        table.add(startButton).width(160).height(32);
 
         stage.addActor(table);
     }
@@ -47,7 +56,7 @@ public class MainMenuScreen implements Screen {
 
     public void render(float delta) {
         // clear screen
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         // update camera and viewport
         viewport.apply();
