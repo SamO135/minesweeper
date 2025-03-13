@@ -32,7 +32,7 @@ public class GameOverScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        gameOverTexture = new Texture(Gdx.files.internal("game_over_text.png"));
+        gameOverTexture = new Texture(Gdx.files.internal("text/game_over_text.png"));
         Image gameOverImage = new Image(new TextureRegionDrawable(new TextureRegion(gameOverTexture)));
 
         // create play again button
