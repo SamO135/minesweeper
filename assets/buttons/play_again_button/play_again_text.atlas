@@ -1,0 +1,7 @@
+play_again_text.png
+size:512,128
+repeat:none
+button_up
+bounds:164,2,160,64
+button_down
+bounds:2,2,160,64

@@ -1,15 +1,17 @@
-package io.github.minesweeper;
+package io.github.minesweeper.input;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import io.github.minesweeper.game.Cell;
+import io.github.minesweeper.game.Grid;
 
-public class MyInputProcessor extends InputAdapter {
+public class GameplayInputProcessor extends InputAdapter {
     private final FitViewport viewport;
     private final Grid grid;
 
-    public MyInputProcessor(FitViewport viewport, Grid grid) {
+    public GameplayInputProcessor(FitViewport viewport, Grid grid) {
         this.viewport = viewport;
         this.grid = grid;
     }
@@ -17,6 +19,7 @@ public class MyInputProcessor extends InputAdapter {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 worldCoordinates = viewport.unproject(new Vector3(screenX, screenY, 0));
+        System.out.println(worldCoordinates.x + ", " + worldCoordinates.y);
 
         if (worldCoordinates.x < 0 || worldCoordinates.x > viewport.getWorldWidth()) {
             return true;

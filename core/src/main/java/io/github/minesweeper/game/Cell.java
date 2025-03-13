@@ -1,10 +1,8 @@
-package io.github.minesweeper;
+package io.github.minesweeper.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import java.util.Vector;
 
 public class Cell {
     private Texture image;
@@ -18,7 +16,8 @@ public class Cell {
     public Cell(float x, float y){
         image = new Texture("cells/basic_cell.png");
         sprite = new Sprite(image);
-        sprite.setPosition(x * sprite.getWidth(), y * sprite.getHeight());
+        sprite.setSize(1, 1);
+        sprite.setPosition(x, y);
     }
 
     public void render(SpriteBatch spriteBatch){

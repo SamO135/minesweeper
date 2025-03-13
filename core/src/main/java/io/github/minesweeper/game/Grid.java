@@ -1,8 +1,7 @@
-package io.github.minesweeper;
+package io.github.minesweeper.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import java.lang.reflect.Array;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
@@ -11,6 +10,7 @@ public class Grid {
     private final Cell[][] grid;
     private final int gridWidth;
     private final int gridHeight;
+    public boolean clickedMine;
 
     public Grid(int width, int height, int numMines) {
         grid = new Cell[width][height];
@@ -52,8 +52,8 @@ public class Grid {
     }
 
     private ArrayList<Cell> getNeighbours(Cell[][] grid, Cell cell) {
-        int xIndex = worldCoordsToGridIndex(cell.sprite.getX());
-        int yIndex = worldCoordsToGridIndex(cell.sprite.getY());
+        int xIndex = (int)cell.sprite.getX();
+        int yIndex = (int)cell.sprite.getY();
 
         ArrayList<Cell> neighbours = new ArrayList<Cell>();
         for (int x : new int[]{-1, 0, 1}) {
@@ -64,7 +64,7 @@ public class Grid {
                 int newX = xIndex + x;
                 int newY = yIndex + y;
                 if (newX >= 0 && newX < gridWidth && newY >= 0 && newY < gridHeight) {
-                    neighbours.add(grid[xIndex + x][yIndex + y]);
+                    neighbours.add(grid[newX][newY]);
                 }
             }
         }
@@ -80,12 +80,17 @@ public class Grid {
     }
 
     public Cell getCell(int xCoord, int yCoord) {
-        int spriteWidth = (int) grid[0][0].sprite.getWidth();
-        return grid[xCoord / spriteWidth][yCoord / spriteWidth];
+        return grid[xCoord][yCoord];
     }
 
     /* Breadth First Search to reveal all connected cells that are not neighbouring a mine */
     public void reveal(Cell clickedCell) {
+        if (clickedCell.isMine){
+            clickedCell.reveal();
+            clickedMine = true;
+            return;
+        }
+
         Cell nextCell;
         Queue<Cell> queue = new ArrayDeque<>();
         queue.add(clickedCell);
@@ -93,7 +98,6 @@ public class Grid {
         while (!queue.isEmpty()) {
             nextCell = queue.poll();
             nextCell.reveal();
-            System.out.println(nextCell.number);
 
             if (nextCell.number == 0 && !nextCell.isMine) {
                 ArrayList<Cell> neighbours = getNeighbours(grid, nextCell);
@@ -106,7 +110,15 @@ public class Grid {
         }
     }
 
-    public int worldCoordsToGridIndex(float worldCoordinate) {
-        return (int)(worldCoordinate / grid[0][0].sprite.getWidth());
+    public int getGridWidth() {
+        return gridWidth;
+    }
+
+    public int getGridHeight() {
+        return gridHeight;
+    }
+
+    public Cell[][] getGrid() {
+        return grid;
     }
 }
