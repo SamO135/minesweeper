@@ -90,10 +90,10 @@ public class GameScreen implements Screen {
                 }
             }
         }
-        game.setScreen(new GameOverScreen(game));
+        Gdx.app.postRunnable(() -> game.setScreen(new GameOverScreen(game)));
     }
 
     private void gameWon() {
-        game.setScreen(new GameWonScreen(game));
+        Gdx.app.postRunnable(() -> game.setScreen(new GameWonScreen(game)));
     }
 }
