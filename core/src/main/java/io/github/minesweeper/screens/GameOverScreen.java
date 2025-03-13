@@ -2,8 +2,10 @@ package io.github.minesweeper.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,6 +21,7 @@ import io.github.minesweeper.ui.CustomButton;
 public class GameOverScreen implements Screen {
     private final MinesweeperGame game;
     private final SpriteBatch spriteBatch;
+    private final Texture dimTexture;
     OrthographicCamera camera;
     FitViewport viewport;
 
@@ -31,6 +34,10 @@ public class GameOverScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
+        // create dimming texture
+        dimTexture = new Texture((Gdx.files.internal("vfx/dimmer.png")));
+
+        // create game over text
         Texture gameOverTexture = new Texture(Gdx.files.internal("text/game_over_text.png"));
         Image gameOverImage = new Image(new TextureRegionDrawable(new TextureRegion(gameOverTexture)));
 
@@ -72,6 +79,11 @@ public class GameOverScreen implements Screen {
         // render game grid in the background
         spriteBatch.begin();
         game.grid.render(spriteBatch);
+
+        // dim background
+        spriteBatch.setColor(0, 0, 0, 0.5f);
+        spriteBatch.draw(dimTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         spriteBatch.end();
 
         // render UI

@@ -20,6 +20,7 @@ public class GameWonScreen implements Screen {
     private final SpriteBatch spriteBatch;
     private final MinesweeperGame game;
     private final Stage stage;
+    private final Texture dimTexture;
     private OrthographicCamera camera;
     private FitViewport viewport;
 
@@ -29,6 +30,9 @@ public class GameWonScreen implements Screen {
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
+
+        // create dimming texture
+        dimTexture = new Texture((Gdx.files.internal("vfx/dimmer.png")));
 
         // create win text
         Texture winTexture = new Texture(Gdx.files.internal("text/win_text.png"));
@@ -73,6 +77,11 @@ public class GameWonScreen implements Screen {
         // render grid
         spriteBatch.begin();
         game.grid.render(spriteBatch);
+
+        // dim background
+        spriteBatch.setColor(0, 0, 0, 0.5f);
+        spriteBatch.draw(dimTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         spriteBatch.end();
 
         // render UI
