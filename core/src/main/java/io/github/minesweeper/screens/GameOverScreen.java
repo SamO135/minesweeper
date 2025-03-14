@@ -2,10 +2,8 @@ package io.github.minesweeper.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -23,7 +21,7 @@ public class GameOverScreen implements Screen {
     private final SpriteBatch spriteBatch;
     private final Texture dimTexture;
     OrthographicCamera camera;
-    FitViewport viewport;
+    FitViewport gameViewport;
 
     private final Stage stage;
 
@@ -31,7 +29,8 @@ public class GameOverScreen implements Screen {
         this.game = game;
         spriteBatch = new SpriteBatch();
 
-        stage = new Stage(new FitViewport(0, 0));
+        FitViewport uiViewport = game.getUIViewport();
+        stage = new Stage(uiViewport);
         Gdx.input.setInputProcessor(stage);
 
         // create dimming texture
@@ -46,12 +45,14 @@ public class GameOverScreen implements Screen {
         CustomButton playAgainButton = new CustomButton(buttonAtlas, this::onPlayAgainClick);
 
         // Create UI Table
+        float uiWidth = uiViewport.getWorldWidth();
+        float uiHeight = uiViewport.getWorldHeight();
         Table table = new Table();
-        table.add(gameOverImage).width(8).height(4);
-        table.getCell(gameOverImage).expand().top().padTop(1);
+        table.add(gameOverImage).width(uiWidth * 0.6f).height(uiHeight * 0.3f);
+        table.getCell(gameOverImage).expand().top().padTop(uiHeight * 0.1f);
         table.row();
-        table.add(playAgainButton).width(5).height(2);
-        table.getCell(playAgainButton).expand().bottom().padBottom(1);
+        table.add(playAgainButton).width(uiWidth * 0.25f).height(uiHeight * 0.1f);
+        table.getCell(playAgainButton).expand().bottom().padBottom(uiHeight * 0.2f);
         table.setFillParent(true);
         stage.addActor(table);
     }
@@ -61,11 +62,11 @@ public class GameOverScreen implements Screen {
         // set up camera and viewport
         this.camera = game.getCamera();
         this.camera.setToOrtho(false, game.grid.getWidth(), game.grid.getHeight());
-        this.viewport = game.getViewport();
-        this.viewport.setWorldSize(game.grid.getWidth(), game.grid.getHeight());
+        this.gameViewport = game.getGameViewport();
+        this.gameViewport.setWorldSize(game.grid.getWidth(), game.grid.getHeight());
 
         // set up UI viewport
-        stage.getViewport().setWorldSize(game.grid.getWidth(), game.grid.getHeight());
+//        stage.getViewport().setWorldSize(game.grid.getWidth(), game.grid.getHeight());
     }
 
     @Override
@@ -74,7 +75,7 @@ public class GameOverScreen implements Screen {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         // update camera and viewport
-        viewport.apply();
+        gameViewport.apply();
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
 
@@ -97,7 +98,7 @@ public class GameOverScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         // resize the world viewport
-        viewport.update(width, height, true);
+        gameViewport.update(width, height, true);
         // resize the UI viewport
         stage.getViewport().update(width, height, true);
     }

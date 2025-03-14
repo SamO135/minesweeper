@@ -49,7 +49,7 @@ public class MainMenuScreen implements Screen {
     public void show() {
         // set up camera and viewport
         int worldSize = 352;
-        this.viewport = game.getViewport();
+        this.viewport = game.getGameViewport();
         this.viewport.setWorldSize(worldSize, worldSize);
         this.camera = game.getCamera();
         this.camera.setToOrtho(false,worldSize, worldSize);

@@ -21,13 +21,13 @@ public class GameScreen implements Screen {
     public GameScreen(MinesweeperGame game) {
         this.game = game;
         spriteBatch = new SpriteBatch();
-        grid = new Grid(10, 10, 10);
+        grid = new Grid(game.difficulty.width, game.difficulty.height, game.difficulty.mines);
         game.grid = grid;
 
         // set up camera and world viewport
         this.camera = game.getCamera();
         this.camera.setToOrtho(false, grid.getWidth(), grid.getHeight());
-        this.viewport = game.getViewport();
+        this.viewport = game.getGameViewport();
         this.viewport.setWorldSize(grid.getWidth(), grid.getHeight());
 
 

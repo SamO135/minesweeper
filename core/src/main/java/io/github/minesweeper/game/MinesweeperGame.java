@@ -5,20 +5,27 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.minesweeper.screens.MainMenuScreen;
+import io.github.minesweeper.settings.Difficulty;
 
 public class MinesweeperGame extends Game {
-    OrthographicCamera camera;
-    FitViewport viewport;
+    private OrthographicCamera camera;
+    private FitViewport gameViewport;
+    private FitViewport uiViewport;
     SpriteBatch spriteBatch;
     public Grid grid;
+    public Difficulty difficulty;
 
     @Override
     public void create() {
         spriteBatch = new SpriteBatch();
 
+        // set default difficulty
+        difficulty = Difficulty.MEDIUM;
+
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 600); // window size
-        viewport = new FitViewport(800, 600);  // world coordinates
+        camera.setToOrtho(false, Difficulty.EASY.width, Difficulty.EASY.height); // window size
+        gameViewport = new FitViewport(Difficulty.EASY.width, Difficulty.EASY.height);  // world coordinates
+        uiViewport = new FitViewport(100, 100);
 
         this.setScreen(new MainMenuScreen(this));
     }
@@ -37,7 +44,11 @@ public class MinesweeperGame extends Game {
         return camera;
     }
 
-    public FitViewport getViewport() {
-        return viewport;
+    public FitViewport getGameViewport() {
+        return gameViewport;
+    }
+
+    public FitViewport getUIViewport() {
+        return uiViewport;
     }
 }

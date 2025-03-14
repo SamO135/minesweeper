@@ -22,13 +22,14 @@ public class GameWonScreen implements Screen {
     private final Stage stage;
     private final Texture dimTexture;
     private OrthographicCamera camera;
-    private FitViewport viewport;
+    private FitViewport gameViewport;
 
     public GameWonScreen(MinesweeperGame game) {
         this.game = game;
         spriteBatch = new SpriteBatch();
 
-        stage = new Stage(new FitViewport(0, 0));
+        FitViewport uiViewport = game.getUIViewport();
+        stage = new Stage(uiViewport);
         Gdx.input.setInputProcessor(stage);
 
         // create dimming texture
@@ -43,12 +44,14 @@ public class GameWonScreen implements Screen {
         CustomButton playAgainButton = new CustomButton(buttonAtlas, this::onPlayAgainClick);
 
         // Create UI Table
+        float uiWidth = uiViewport.getWorldWidth();
+        float uiHeight = uiViewport.getWorldHeight();
         Table table = new Table();
-        table.add(winTextImage).width(6).height(2);
-        table.getCell(winTextImage).expand().top().padTop(2);
+        table.add(winTextImage).width(uiWidth * 0.45f).height(uiHeight * 0.15f);
+        table.getCell(winTextImage).expand().top().padTop(uiHeight * 0.2f);
         table.row();
-        table.add(playAgainButton).width(5).height(2);
-        table.getCell(playAgainButton).expand().bottom().padBottom(1);
+        table.add(playAgainButton).width(uiWidth * 0.25f).height(uiHeight * 0.1f);
+        table.getCell(playAgainButton).expand().bottom().padBottom(uiHeight * 0.2f);
         table.setFillParent(true);
         stage.addActor(table);
 
@@ -59,11 +62,11 @@ public class GameWonScreen implements Screen {
         // set up camera and world viewport
         this.camera = game.getCamera();
         this.camera.setToOrtho(false, game.grid.getWidth(), game.grid.getHeight());
-        this.viewport = game.getViewport();
-        this.viewport.setWorldSize(game.grid.getWidth(), game.grid.getHeight());
+        this.gameViewport = game.getGameViewport();
+        this.gameViewport.setWorldSize(game.grid.getWidth(), game.grid.getHeight());
 
         // set up UI viewport
-        stage.getViewport().setWorldSize(game.grid.getWidth(), game.grid.getHeight());
+//        stage.getViewport().setWorldSize(game.grid.getWidth(), game.grid.getHeight());
     }
 
     @Override
@@ -72,7 +75,7 @@ public class GameWonScreen implements Screen {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         // update camera and viewport
-        viewport.apply();
+        gameViewport.apply();
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
 
@@ -94,7 +97,7 @@ public class GameWonScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         // resize the world viewport
-        viewport.update(width, height, true);
+        gameViewport.update(width, height, true);
         // resize the UI viewport
         stage.getViewport().update(width, height, true);
     }
