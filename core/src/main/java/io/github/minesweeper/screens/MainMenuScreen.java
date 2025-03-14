@@ -27,9 +27,8 @@ public class MainMenuScreen implements Screen {
         this.game = game;
         spriteBatch = new SpriteBatch();
 
-        stage = new Stage();
+        stage = new Stage(new FitViewport(0, 0));
         Gdx.input.setInputProcessor(stage);
-
 
         Texture titleText = new Texture(Gdx.files.internal("text/minesweeper_text.png"));
         Image titleTextImage = new Image(new TextureRegionDrawable(new TextureRegion(titleText)));
@@ -39,9 +38,9 @@ public class MainMenuScreen implements Screen {
 
         Table table = new Table();
         table.setFillParent(true);
-        table.add(titleTextImage).width(528).height(48).padBottom(256);
+        table.add(titleTextImage).expand().top().padTop(32);
         table.row();
-        table.add(startButton).width(160).height(32);
+        table.add(startButton).expand().bottom().padBottom(96);
 
         stage.addActor(table);
     }
@@ -49,9 +48,12 @@ public class MainMenuScreen implements Screen {
     @Override
     public void show() {
         // set up camera and viewport
+        int worldSize = 352;
         this.viewport = game.getViewport();
+        this.viewport.setWorldSize(worldSize, worldSize);
         this.camera = game.getCamera();
-        stage.getViewport().setWorldSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        this.camera.setToOrtho(false,worldSize, worldSize);
+        stage.getViewport().setWorldSize(worldSize, worldSize);
     }
 
     public void render(float delta) {
@@ -75,7 +77,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         // resize the world viewport
-        viewport.update(width, height);
+        viewport.update(width, height, true);
         // resize the UI viewport
         stage.getViewport().update(width, height, true);
 

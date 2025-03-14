@@ -28,7 +28,7 @@ public class GameWonScreen implements Screen {
         this.game = game;
         spriteBatch = new SpriteBatch();
 
-        stage = new Stage();
+        stage = new Stage(new FitViewport(0, 0));
         Gdx.input.setInputProcessor(stage);
 
         // create dimming texture
@@ -44,9 +44,11 @@ public class GameWonScreen implements Screen {
 
         // Create UI Table
         Table table = new Table();
-        table.add(winTextImage).width(6).height(2).padBottom(2);
+        table.add(winTextImage).width(6).height(2);
+        table.getCell(winTextImage).expand().top().padTop(2);
         table.row();
         table.add(playAgainButton).width(5).height(2);
+        table.getCell(playAgainButton).expand().bottom().padBottom(1);
         table.setFillParent(true);
         stage.addActor(table);
 
@@ -92,7 +94,7 @@ public class GameWonScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         // resize the world viewport
-        viewport.update(width, height);
+        viewport.update(width, height, true);
         // resize the UI viewport
         stage.getViewport().update(width, height, true);
     }
