@@ -3,6 +3,7 @@ package io.github.minesweeper.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class Cell {
     private Texture image;
@@ -11,13 +12,16 @@ public class Cell {
     public boolean isMine;
     public boolean isRevealed;
     private boolean isFlagged;
+    public final float xIndex, yIndex;
 
 
-    public Cell(float x, float y){
+    public Cell(Vector2 position, int xIndex, int yIndex){
+        this.xIndex = xIndex;
+        this.yIndex = yIndex;
         image = new Texture("cells/basic_cell.png");
         sprite = new Sprite(image);
         sprite.setSize(1, 1);
-        sprite.setPosition(x, y);
+        sprite.setPosition(position.x, position.y);
     }
 
     public void render(SpriteBatch spriteBatch){

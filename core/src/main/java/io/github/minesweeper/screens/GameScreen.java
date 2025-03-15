@@ -17,25 +17,30 @@ public class GameScreen implements Screen {
     private final Grid grid;
     OrthographicCamera camera;
     FitViewport viewport;
+    public float borderWidth = 0.5f;
+    public float taskbarHeight = 15f;
 
     public GameScreen(MinesweeperGame game) {
         this.game = game;
         spriteBatch = new SpriteBatch();
-        grid = new Grid(game.difficulty.width, game.difficulty.height, game.difficulty.mines);
+        grid = new Grid(game.difficulty.width, game.difficulty.height, game.difficulty.mines, borderWidth);
         game.grid = grid;
+
+        float gameWidth = grid.getWidth() + borderWidth*2;
+        float gameHeight = grid.getHeight() + borderWidth + taskbarHeight;
 
         // set up camera and world viewport
         this.camera = game.getCamera();
-        this.camera.setToOrtho(false, grid.getWidth(), grid.getHeight());
+        this.camera.setToOrtho(false, gameWidth, gameHeight);
         this.viewport = game.getGameViewport();
-        this.viewport.setWorldSize(grid.getWidth(), grid.getHeight());
+        this.viewport.setWorldSize(gameWidth, gameHeight);
 
 
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(new GameplayInputProcessor(viewport, grid));
+        Gdx.input.setInputProcessor(new GameplayInputProcessor(viewport, grid, borderWidth));
     }
 
     @Override

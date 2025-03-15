@@ -1,6 +1,7 @@
 package io.github.minesweeper.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -13,20 +14,27 @@ public class Grid {
     private final int numMines;
     private int cellsRevealed;
     public boolean clickedMine;
+    private final float gridOffset;
 
-    public Grid(int width, int height, int numMines) {
+    public Grid(int width, int height, int numMines, float gridOffset) {
         grid = new Cell[width][height];
         this.width = width;
         this.height = height;
         this.numMines = numMines;
+        this.gridOffset = gridOffset;
         createGrid(width, height);
         placeMines(numMines);
     }
 
     public void createGrid(int width, int height) {
+        float cellX;
+        float cellY;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                grid[x][y] = new Cell(x, y);
+                cellX = x + gridOffset;
+                cellY = y + gridOffset;
+                Vector2 position = new Vector2(cellX, cellY);
+                grid[x][y] = new Cell(position, x, y);
             }
         }
     }
@@ -55,8 +63,8 @@ public class Grid {
     }
 
     private ArrayList<Cell> getNeighbours(Cell[][] grid, Cell cell) {
-        int xIndex = (int)cell.sprite.getX();
-        int yIndex = (int)cell.sprite.getY();
+        int xIndex = (int)cell.xIndex;
+        int yIndex = (int)cell.yIndex;
 
         ArrayList<Cell> neighbours = new ArrayList<Cell>();
         for (int x : new int[]{-1, 0, 1}) {
@@ -98,7 +106,7 @@ public class Grid {
         Queue<Cell> queue = new ArrayDeque<>();
         boolean[][] visited = new boolean[width][height];
         queue.add(clickedCell);
-        visited[(int)clickedCell.sprite.getX()][(int)clickedCell.sprite.getY()] = true;
+        visited[(int)clickedCell.xIndex][(int)clickedCell.yIndex] = true;
 
         while (!queue.isEmpty()) {
             nextCell = queue.poll();
@@ -108,11 +116,9 @@ public class Grid {
             if (nextCell.number == 0 && !nextCell.isMine) {
                 ArrayList<Cell> neighbours = getNeighbours(grid, nextCell);
                 for (Cell neighbour : neighbours){
-                    int neighbourX = (int)neighbour.sprite.getX();
-                    int neighbourY = (int)neighbour.sprite.getY();
-                    if (!visited[neighbourX][neighbourY] && !neighbour.isRevealed) {
+                    if (!visited[(int)neighbour.xIndex][(int)neighbour.yIndex] && !neighbour.isRevealed) {
                         queue.add(neighbour);
-                        visited[neighbourX][neighbourY] = true;
+                        visited[(int)neighbour.xIndex][(int)neighbour.yIndex] = true;
                     }
                 }
             }

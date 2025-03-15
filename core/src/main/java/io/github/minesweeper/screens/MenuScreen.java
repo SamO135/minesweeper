@@ -25,15 +25,17 @@ abstract class MenuScreen implements Screen {
         this.game = game;
         spriteBatch = new SpriteBatch();
 
-        // set up ui viewport
-        FitViewport uiViewport = game.getUIViewport();
-        stage = new Stage(uiViewport);
-        Gdx.input.setInputProcessor(stage);
-
         // set up camera and game viewport
         this.camera = game.getCamera();
         this.gameViewport = game.getGameViewport();
 
+        // set up ui viewport with same aspect ratio as game viewport
+        float gameAspectRatio = gameViewport.getWorldHeight() / gameViewport.getWorldWidth();
+        FitViewport uiViewport = game.getUIViewport();
+        uiViewport.setWorldSize(uiViewport.getWorldWidth(), uiViewport.getWorldHeight() * gameAspectRatio);
+        stage = new Stage(uiViewport);
+        Gdx.input.setInputProcessor(stage);
+        
         uiWidth = uiViewport.getWorldWidth();
         uiHeight = uiViewport.getWorldHeight();
     }
