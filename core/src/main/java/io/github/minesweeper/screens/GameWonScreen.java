@@ -1,36 +1,21 @@
 package io.github.minesweeper.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.minesweeper.game.MinesweeperGame;
 import io.github.minesweeper.ui.CustomButton;
 
-public class GameWonScreen implements Screen {
-    private final SpriteBatch spriteBatch;
-    private final MinesweeperGame game;
-    private final Stage stage;
+public class GameWonScreen extends MenuScreen {
     private final Texture dimTexture;
-    private OrthographicCamera camera;
-    private FitViewport gameViewport;
 
     public GameWonScreen(MinesweeperGame game) {
-        this.game = game;
-        spriteBatch = new SpriteBatch();
-
-        FitViewport uiViewport = game.getUIViewport();
-        stage = new Stage(uiViewport);
-        Gdx.input.setInputProcessor(stage);
+        super(game);
 
         // create dimming texture
         dimTexture = new Texture((Gdx.files.internal("vfx/dimmer.png")));
@@ -44,8 +29,6 @@ public class GameWonScreen implements Screen {
         CustomButton playAgainButton = new CustomButton(buttonAtlas, this::onPlayAgainClick);
 
         // Create UI Table
-        float uiWidth = uiViewport.getWorldWidth();
-        float uiHeight = uiViewport.getWorldHeight();
         Table table = new Table();
         table.add(winTextImage).width(uiWidth * 0.45f).height(uiHeight * 0.15f);
         table.getCell(winTextImage).expand().top().padTop(uiHeight * 0.2f);
@@ -55,18 +38,6 @@ public class GameWonScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-    }
-
-    @Override
-    public void show() {
-        // set up camera and world viewport
-        this.camera = game.getCamera();
-        this.camera.setToOrtho(false, game.grid.getWidth(), game.grid.getHeight());
-        this.gameViewport = game.getGameViewport();
-        this.gameViewport.setWorldSize(game.grid.getWidth(), game.grid.getHeight());
-
-        // set up UI viewport
-//        stage.getViewport().setWorldSize(game.grid.getWidth(), game.grid.getHeight());
     }
 
     @Override
@@ -94,27 +65,9 @@ public class GameWonScreen implements Screen {
         stage.draw();
     }
 
-    @Override
-    public void resize(int width, int height) {
-        // resize the world viewport
-        gameViewport.update(width, height, true);
-        // resize the UI viewport
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
-
-    @Override
-    public void hide() {}
-
-    @Override
     public void dispose() {
-        spriteBatch.dispose();
-        stage.dispose();
+        super.dispose();
+        dimTexture.dispose();
     }
 
     private void onPlayAgainClick() {

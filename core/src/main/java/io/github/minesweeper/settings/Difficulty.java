@@ -1,7 +1,7 @@
 package io.github.minesweeper.settings;
 
 public enum Difficulty {
-    EASY(10, 10, 5),
+    EASY(10, 10, 10),
     MEDIUM(16, 16, 40),
     HARD(24, 24, 99);
 

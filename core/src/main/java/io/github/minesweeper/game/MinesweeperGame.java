@@ -20,7 +20,7 @@ public class MinesweeperGame extends Game {
         spriteBatch = new SpriteBatch();
 
         // set default difficulty
-        difficulty = Difficulty.MEDIUM;
+        difficulty = Difficulty.EASY;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Difficulty.EASY.width, Difficulty.EASY.height); // window size
