@@ -1,0 +1,7 @@
+hard_text.png
+size:512,64
+repeat:none
+button_up
+bounds:2,2,128,32
+button_down
+bounds:132,2,128,32
