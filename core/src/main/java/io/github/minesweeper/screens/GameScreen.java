@@ -1,46 +1,52 @@
 package io.github.minesweeper.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.minesweeper.game.Cell;
 import io.github.minesweeper.game.MinesweeperGame;
 import io.github.minesweeper.input.GameplayInputProcessor;
 import io.github.minesweeper.game.Grid;
+import io.github.minesweeper.ui.CustomButton;
 
-public class GameScreen implements Screen {
-    private final MinesweeperGame game;
-    private final SpriteBatch spriteBatch;
+public class GameScreen extends MenuScreen {
     private final Grid grid;
     OrthographicCamera camera;
-    FitViewport viewport;
     public float borderWidth = 0.5f;
-    public float taskbarHeight = 15f;
+    public float taskbarHeight = 1.5f;
 
     public GameScreen(MinesweeperGame game) {
-        this.game = game;
-        spriteBatch = new SpriteBatch();
+        super(game);
+
         grid = new Grid(game.difficulty.width, game.difficulty.height, game.difficulty.mines, borderWidth);
         game.grid = grid;
 
         float gameWidth = grid.getWidth() + borderWidth*2;
         float gameHeight = grid.getHeight() + borderWidth + taskbarHeight;
 
-        // set up camera and world viewport
+        // set up camera and game viewport
         this.camera = game.getCamera();
         this.camera.setToOrtho(false, gameWidth, gameHeight);
-        this.viewport = game.getGameViewport();
-        this.viewport.setWorldSize(gameWidth, gameHeight);
+        this.gameViewport = game.getGameViewport();
+        this.gameViewport.setWorldSize(gameWidth, gameHeight);
 
+        CustomButton pauseButton = createCustomButton("buttons/pause/pause_button.atlas", this::gameWon);
 
+        Table table = new Table();
+        table.setFillParent(true);
+        table.add(pauseButton).width(uiWidth * 0.1f).height(uiHeight * 0.1f);
+        table.getCell(pauseButton).expand().top().left();
+        stage.addActor(table);
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(new GameplayInputProcessor(viewport, grid, borderWidth));
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(new GameplayInputProcessor(gameViewport, grid, borderWidth));
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
@@ -49,7 +55,7 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         // update camera and world viewport
-        viewport.apply();
+        gameViewport.apply();
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
 
@@ -65,26 +71,9 @@ public class GameScreen implements Screen {
         spriteBatch.begin();
         grid.render(spriteBatch);
         spriteBatch.end();
-    }
 
-    @Override
-    public void resize(int width, int height){
-        // resize the world viewport
-        viewport.update(width, height, true);
-    }
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
-
-    @Override
-    public void hide() {}
-
-    @Override
-    public void dispose(){
-        spriteBatch.dispose();
+        stage.act(delta);
+        stage.draw();
     }
 
     private void gameOver(){
@@ -101,4 +90,8 @@ public class GameScreen implements Screen {
     private void gameWon() {
         Gdx.app.postRunnable(() -> game.setScreen(new GameWonScreen(game)));
     }
+
+//    private void onPauseClick() {
+//        game.setScreen(new PauseScreen(game));
+//    }
 }
