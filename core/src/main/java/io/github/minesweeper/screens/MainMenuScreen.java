@@ -25,7 +25,7 @@ public class MainMenuScreen extends MenuScreen {
 
         Table table = new Table();
         table.setFillParent(true);
-        table.add(titleTextImage).width(uiHeight * .9f).height(uiHeight * .082f);
+        table.add(titleTextImage).width(uiWidth * .9f).height(uiHeight * .082f);
         table.getCell(titleTextImage).expand().top().padTop(uiHeight * .1f);
         table.row();
         table.add(easyButton).width(uiWidth * .2f).height(uiHeight * .05f);
@@ -38,6 +38,11 @@ public class MainMenuScreen extends MenuScreen {
         table.getCell(hardButton).padBottom(uiHeight * .2f);
 
         stage.addActor(table);
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
     }
 
     private void onEasyClick() {

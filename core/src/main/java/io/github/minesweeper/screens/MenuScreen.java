@@ -16,8 +16,7 @@ abstract class MenuScreen implements Screen {
     protected final MinesweeperGame game;
     protected final SpriteBatch spriteBatch;
     protected OrthographicCamera camera;
-    protected FitViewport gameViewport;
-    protected final Stage stage;
+    protected Stage stage;
     protected float uiWidth;
     protected float uiHeight;
 
@@ -25,17 +24,12 @@ abstract class MenuScreen implements Screen {
         this.game = game;
         spriteBatch = new SpriteBatch();
 
-        // set up camera and game viewport
-        this.camera = game.getCamera();
-        this.gameViewport = game.getGameViewport();
-
-        // set up ui viewport with same aspect ratio as game viewport
-        float gameAspectRatio = gameViewport.getWorldHeight() / gameViewport.getWorldWidth();
-        FitViewport uiViewport = game.getUIViewport();
-        uiViewport.setWorldSize(uiViewport.getWorldWidth(), uiViewport.getWorldHeight() * gameAspectRatio);
+        // set up camera and ui viewport
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, 100, 100);
+        FitViewport uiViewport = new FitViewport(100, 100);
         stage = new Stage(uiViewport);
-        Gdx.input.setInputProcessor(stage);
-        
+
         uiWidth = uiViewport.getWorldWidth();
         uiHeight = uiViewport.getWorldHeight();
     }
@@ -49,7 +43,7 @@ abstract class MenuScreen implements Screen {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         // update camera and viewport
-        gameViewport.apply();
+        stage.getViewport().apply();
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
 
@@ -60,8 +54,6 @@ abstract class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        // resize the world viewport
-        gameViewport.update(width, height, true);
         // resize the UI viewport
         stage.getViewport().update(width, height, true);
     }

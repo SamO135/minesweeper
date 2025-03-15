@@ -11,11 +11,11 @@ import io.github.minesweeper.input.GameplayInputProcessor;
 import io.github.minesweeper.game.Grid;
 import io.github.minesweeper.ui.CustomButton;
 
-public class GameScreen extends MenuScreen {
+public class GameScreen extends GameMenuScreen {
     private final Grid grid;
-    OrthographicCamera camera;
-    public float borderWidth = 0.5f;
-    public float taskbarHeight = 1.5f;
+//    OrthographicCamera camera;
+//    private final float borderWidth;
+//    private final float taskbarHeight;
 
     public GameScreen(MinesweeperGame game) {
         super(game);
@@ -23,21 +23,13 @@ public class GameScreen extends MenuScreen {
         grid = new Grid(game.difficulty.width, game.difficulty.height, game.difficulty.mines, borderWidth);
         game.grid = grid;
 
-        float gameWidth = grid.getWidth() + borderWidth*2;
-        float gameHeight = grid.getHeight() + borderWidth + taskbarHeight;
-
-        // set up camera and game viewport
-        this.camera = game.getCamera();
-        this.camera.setToOrtho(false, gameWidth, gameHeight);
-        this.gameViewport = game.getGameViewport();
-        this.gameViewport.setWorldSize(gameWidth, gameHeight);
-
         CustomButton pauseButton = createCustomButton("buttons/pause/pause_button.atlas", this::gameWon);
 
         Table table = new Table();
         table.setFillParent(true);
-        table.add(pauseButton).width(uiWidth * 0.1f).height(uiHeight * 0.1f);
+        table.add(pauseButton).width(pauseButton.getWidth() * .5f).height(pauseButton.getHeight() * .5f);
         table.getCell(pauseButton).expand().top().left();
+        table.getCell(pauseButton).padLeft(stage.getViewport().getWorldWidth() * .05f).padTop(stage.getViewport().getWorldWidth() * .05f);
         stage.addActor(table);
     }
 
@@ -56,6 +48,7 @@ public class GameScreen extends MenuScreen {
 
         // update camera and world viewport
         gameViewport.apply();
+        stage.getViewport().apply();
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
 

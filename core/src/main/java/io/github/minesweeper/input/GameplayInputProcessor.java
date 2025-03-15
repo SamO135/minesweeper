@@ -27,7 +27,7 @@ public class GameplayInputProcessor extends InputAdapter {
             (worldCoordinates.y - gridOffset) < 0 || (worldCoordinates.y - gridOffset) > grid.getHeight()){
             return true;
         }
-        System.out.println(worldCoordinates.x + ", " + worldCoordinates.y);
+
         int xCoord = (int) (worldCoordinates.x - gridOffset);
         int yCoord = (int) (worldCoordinates.y - gridOffset);
         Cell clickedCell = grid.getCell(xCoord, yCoord);

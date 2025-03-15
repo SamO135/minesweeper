@@ -1,7 +1,7 @@
 pause_button.png
-size:128,64
+size:64,32
 repeat:none
 button_up
-bounds:2,2,32,32
+bounds:2,2,18,20
 button_down
-bounds:36,2,32,32
+bounds:22,2,18,20
