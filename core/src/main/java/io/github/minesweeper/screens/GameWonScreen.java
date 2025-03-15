@@ -20,8 +20,7 @@ public class GameWonScreen extends GameMenuScreen {
         Image winTextImage = new Image(new TextureRegionDrawable(new TextureRegion(winTexture)));
 
         // create play again button
-        TextureAtlas buttonAtlas = new TextureAtlas(Gdx.files.internal("buttons/play_again_button/play_again_text.atlas"));
-        CustomButton playAgainButton = new CustomButton(buttonAtlas, this::onPlayAgainClick);
+        CustomButton playAgainButton = createCustomButton("buttons/play_again_button/play_again_text.atlas", this::onPlayAgainClick);
 
         // Create UI Table
         Table table = new Table();

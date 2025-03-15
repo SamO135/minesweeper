@@ -3,6 +3,7 @@ package io.github.minesweeper.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -12,9 +13,12 @@ abstract class GameMenuScreen extends MenuScreen {
     protected FitViewport gameViewport;
     protected Texture dimTexture;
     protected float borderWidth, taskbarHeight, gameWidth, gameHeight;
+    protected OrthographicCamera gameCamera;
+    protected SpriteBatch gameBatch;
 
     public GameMenuScreen(MinesweeperGame game) {
         super(game);
+        gameBatch = new SpriteBatch();
 
         int gridWidth = game.difficulty.width;
         int gridHeight = game.difficulty.height;
@@ -25,15 +29,16 @@ abstract class GameMenuScreen extends MenuScreen {
         gameWidth = gridWidth + borderWidth*2;
         gameHeight = gridHeight + borderWidth + taskbarHeight;
 
-        // set up camera and game viewport
-        this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, gameWidth, gameHeight);
-        this.gameViewport = new FitViewport(gameWidth, gameHeight);
+        // set up game camera and viewport
+        gameCamera = new OrthographicCamera();
+        gameCamera.setToOrtho(false, gameWidth, gameHeight);
+        gameViewport = new FitViewport(gameWidth, gameHeight, gameCamera);
 
         // set up ui viewport with same aspect ratio as game viewport
-        float gameAspectRatio = gameHeight / gameWidth;
-        FitViewport uiViewport = new FitViewport(100, 100 * gameAspectRatio);
-        stage = new Stage(uiViewport);
+//        float gameAspectRatio = gameHeight / gameWidth;
+//        uiCamera = new OrthographicCamera(100, 100);
+//        uiViewport = new FitViewport(100, 100, uiCamera);
+//        stage = new Stage(uiViewport);
 
         uiWidth = uiViewport.getWorldWidth();
         uiHeight = uiViewport.getWorldHeight();
@@ -52,23 +57,14 @@ abstract class GameMenuScreen extends MenuScreen {
         // clear screen
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
-        // update camera and viewport
+        // update game camera and viewport
         gameViewport.apply();
-        stage.getViewport().apply();
-        camera.update();
-        spriteBatch.setProjectionMatrix(camera.combined);
-
-        // render game grid in the background
-        spriteBatch.begin();
-        game.grid.render(spriteBatch);
-
-        // dim background
-        spriteBatch.setColor(0, 0, 0, 0.5f);
-        spriteBatch.draw(dimTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        spriteBatch.end();
+        gameBatch.setProjectionMatrix(gameCamera.combined);
+        renderGameLogic();
 
         // render UI
+        uiViewport.apply();
+        uiBatch.setProjectionMatrix(uiCamera.combined);
         stage.act(delta);
         stage.draw();
     }
@@ -86,6 +82,18 @@ abstract class GameMenuScreen extends MenuScreen {
     public void dispose() {
         super.dispose();
         dimTexture.dispose();
+    }
+
+    protected void renderGameLogic() {
+        // render game grid in the background
+        gameBatch.begin();
+        game.grid.render(gameBatch);
+
+        // dim background
+        gameBatch.setColor(0, 0, 0, 0.5f);
+        gameBatch.draw(dimTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        gameBatch.end();
     }
 
 }

@@ -2,7 +2,7 @@ package io.github.minesweeper.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.minesweeper.game.Cell;
@@ -13,23 +13,21 @@ import io.github.minesweeper.ui.CustomButton;
 
 public class GameScreen extends GameMenuScreen {
     private final Grid grid;
-//    OrthographicCamera camera;
-//    private final float borderWidth;
-//    private final float taskbarHeight;
 
     public GameScreen(MinesweeperGame game) {
         super(game);
+        gameBatch = new SpriteBatch();
 
         grid = new Grid(game.difficulty.width, game.difficulty.height, game.difficulty.mines, borderWidth);
         game.grid = grid;
 
-        CustomButton pauseButton = createCustomButton("buttons/pause/pause_button.atlas", this::gameWon);
+        CustomButton pauseButton = createCustomButton("buttons/pause/pause_button.atlas", this::onPauseClick);
 
         Table table = new Table();
         table.setFillParent(true);
         table.add(pauseButton).width(pauseButton.getWidth() * .5f).height(pauseButton.getHeight() * .5f);
         table.getCell(pauseButton).expand().top().left();
-        table.getCell(pauseButton).padLeft(stage.getViewport().getWorldWidth() * .05f).padTop(stage.getViewport().getWorldWidth() * .05f);
+        table.getCell(pauseButton).padLeft(uiViewport.getWorldWidth() * .12f).padTop(uiViewport.getWorldWidth() * .05f);
         stage.addActor(table);
     }
 
@@ -42,16 +40,7 @@ public class GameScreen extends GameMenuScreen {
     }
 
     @Override
-    public void render(float delta) {
-        // clear screen
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-
-        // update camera and world viewport
-        gameViewport.apply();
-        stage.getViewport().apply();
-        camera.update();
-        spriteBatch.setProjectionMatrix(camera.combined);
-
+    protected void renderGameLogic() {
         if (grid.clickedMine) {
             gameOver();
         }
@@ -60,13 +49,10 @@ public class GameScreen extends GameMenuScreen {
             gameWon();
         }
 
-        // render game objects
-        spriteBatch.begin();
-        grid.render(spriteBatch);
-        spriteBatch.end();
-
-        stage.act(delta);
-        stage.draw();
+        // render game grid in the background
+        gameBatch.begin();
+        grid.render(gameBatch);
+        gameBatch.end();
     }
 
     private void gameOver(){
@@ -84,7 +70,7 @@ public class GameScreen extends GameMenuScreen {
         Gdx.app.postRunnable(() -> game.setScreen(new GameWonScreen(game)));
     }
 
-//    private void onPauseClick() {
-//        game.setScreen(new PauseScreen(game));
-//    }
+    private void onPauseClick() {
+        game.setScreen(new PauseScreen(game, this));
+    }
 }

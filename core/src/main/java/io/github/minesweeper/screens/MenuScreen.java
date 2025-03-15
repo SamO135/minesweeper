@@ -14,20 +14,21 @@ import io.github.minesweeper.ui.CustomButton;
 
 abstract class MenuScreen implements Screen {
     protected final MinesweeperGame game;
-    protected final SpriteBatch spriteBatch;
-    protected OrthographicCamera camera;
+    protected final SpriteBatch uiBatch;
+    protected FitViewport uiViewport;
+    protected OrthographicCamera uiCamera;
     protected Stage stage;
     protected float uiWidth;
     protected float uiHeight;
 
     public MenuScreen(MinesweeperGame game) {
         this.game = game;
-        spriteBatch = new SpriteBatch();
+        uiBatch = new SpriteBatch();
 
         // set up camera and ui viewport
-        this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, 100, 100);
-        FitViewport uiViewport = new FitViewport(100, 100);
+        uiCamera = new OrthographicCamera();
+        uiCamera.setToOrtho(false, 100, 100);
+        uiViewport = new FitViewport(100, 100);
         stage = new Stage(uiViewport);
 
         uiWidth = uiViewport.getWorldWidth();
@@ -43,9 +44,9 @@ abstract class MenuScreen implements Screen {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         // update camera and viewport
-        stage.getViewport().apply();
-        camera.update();
-        spriteBatch.setProjectionMatrix(camera.combined);
+        uiViewport.apply();
+        uiCamera.update();
+        uiBatch.setProjectionMatrix(uiCamera.combined);
 
         // render UI
         stage.act(delta);
@@ -69,7 +70,7 @@ abstract class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        spriteBatch.dispose();
+        uiBatch.dispose();
         stage.dispose();
     }
 
