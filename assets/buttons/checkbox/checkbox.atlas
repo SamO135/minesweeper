@@ -1,0 +1,7 @@
+checkbox.png
+size:128,64
+repeat:none
+button_up
+bounds:2,2,32,32
+button_down
+bounds:36,2,32,32

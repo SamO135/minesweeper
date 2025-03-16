@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.minesweeper.game.MinesweeperGame;
 import io.github.minesweeper.ui.ButtonClickHandler;
+import io.github.minesweeper.ui.Checkbox;
 import io.github.minesweeper.ui.CustomButton;
 
 abstract class MenuScreen implements Screen {
@@ -77,6 +78,11 @@ abstract class MenuScreen implements Screen {
     public CustomButton createCustomButton(String atlasPath, ButtonClickHandler buttonClickHandler) {
         TextureAtlas buttonAtlas = new TextureAtlas(Gdx.files.internal(atlasPath));
         return new CustomButton(buttonAtlas, buttonClickHandler);
+    }
+
+    public Checkbox createCheckbox(String atlasPath, ButtonClickHandler buttonClickHandler) {
+        TextureAtlas buttonAtlas = new TextureAtlas(Gdx.files.internal(atlasPath));
+        return new Checkbox(buttonAtlas, buttonClickHandler);
     }
 
 }
