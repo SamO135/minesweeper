@@ -22,9 +22,11 @@ public class MainMenuScreen extends MenuScreen {
         CustomButton easyButton = createCustomButton("buttons/easy/easy_text.atlas", this::onEasyClick);
         CustomButton normalButton = createCustomButton("buttons/normal/normal_text.atlas", this::onNormalClick);
         CustomButton hardButton = createCustomButton("buttons/hard/hard_text.atlas", this::onHardClick);
+        CustomButton settingsButton = createCustomButton("buttons/settings/settings_text.atlas", this::onSettingsClick);
+        CustomButton exitButton = createCustomButton("buttons/exit/exit_text.atlas", game::exitGame);
 
         float textSize = .05f; // relative to viewport size
-        float spacing = .1f; // relative to viewport size
+        float spacing = .05f; // relative to viewport size
         Table table = new Table();
         table.setFillParent(true);
         table.add(titleTextImage).width(uiWidth * .9f).height(uiHeight * .082f);
@@ -37,7 +39,13 @@ public class MainMenuScreen extends MenuScreen {
         table.getCell(normalButton).padBottom(uiHeight * spacing);
         table.row();
         table.add(hardButton).width(uiWidth * textSize * 4).height(uiHeight * textSize);
-        table.getCell(hardButton).padBottom(uiHeight * .2f);
+        table.getCell(hardButton).padBottom(uiHeight * spacing);
+        table.row();
+        table.add(settingsButton).width(uiWidth * textSize * 8).height(uiHeight * textSize);
+        table.getCell(settingsButton).padBottom(uiHeight * spacing);
+        table.row();
+        table.add(exitButton).width(uiWidth * textSize * 4).height(uiHeight * textSize);
+        table.getCell(exitButton).padBottom(uiHeight * .1f);
 
         stage.addActor(table);
     }
@@ -60,5 +68,9 @@ public class MainMenuScreen extends MenuScreen {
     private void onHardClick() {
         game.settings.difficulty = Difficulty.HARD;
         game.setScreen(new GameScreen(game));
+    }
+
+    private void onSettingsClick() {
+        game.setScreen(new SettingsScreen(game, this));
     }
 }
