@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.minesweeper.game.MinesweeperGame;
-import io.github.minesweeper.settings.Difficulty;
 import io.github.minesweeper.ui.CustomButton;
 
 public class MainMenuScreen extends MenuScreen {
@@ -19,55 +18,36 @@ public class MainMenuScreen extends MenuScreen {
         Image titleTextImage = new Image(new TextureRegionDrawable(new TextureRegion(titleText)));
 
         // create buttons
-        CustomButton easyButton = createCustomButton("buttons/easy/easy_text.atlas", this::onEasyClick);
-        CustomButton normalButton = createCustomButton("buttons/normal/normal_text.atlas", this::onNormalClick);
-        CustomButton hardButton = createCustomButton("buttons/hard/hard_text.atlas", this::onHardClick);
         CustomButton settingsButton = createCustomButton("buttons/settings/settings_text.atlas", this::onSettingsClick);
         CustomButton exitButton = createCustomButton("buttons/exit/exit_text.atlas", game::exitGame);
+        CustomButton startButton = createCustomButton("buttons/start/start_text.atlas", this::onStartClick);
 
         float textSize = .05f; // relative to viewport size
-        float spacing = .05f; // relative to viewport size
+        float spacing = .075f; // relative to viewport size
         Table table = new Table();
         table.setFillParent(true);
         table.add(titleTextImage).width(uiWidth * .9f).height(uiHeight * .082f);
         table.getCell(titleTextImage).expand().top().padTop(uiHeight * .1f);
         table.row();
-        table.add(easyButton).width(uiWidth * textSize * 4).height(uiHeight * textSize);
-        table.getCell(easyButton).padBottom(uiHeight * spacing);
-        table.row();
-        table.add(normalButton).width(uiWidth * textSize * 6).height(uiHeight * textSize);
-        table.getCell(normalButton).padBottom(uiHeight * spacing);
-        table.row();
-        table.add(hardButton).width(uiWidth * textSize * 4).height(uiHeight * textSize);
-        table.getCell(hardButton).padBottom(uiHeight * spacing);
+        table.add(startButton).width(uiWidth * textSize * 5).height(uiHeight * textSize);
+        table.getCell(startButton).padBottom(uiHeight * spacing);
         table.row();
         table.add(settingsButton).width(uiWidth * textSize * 8).height(uiHeight * textSize);
         table.getCell(settingsButton).padBottom(uiHeight * spacing);
         table.row();
         table.add(exitButton).width(uiWidth * textSize * 4).height(uiHeight * textSize);
-        table.getCell(exitButton).padBottom(uiHeight * .1f);
+        table.getCell(exitButton).padBottom(uiHeight * .2f);
 
         stage.addActor(table);
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(this.stage);
     }
 
-    private void onEasyClick() {
-        game.settings.difficulty = Difficulty.EASY;
-        game.setScreen(new GameScreen(game));
-    }
-
-    private void onNormalClick() {
-        game.settings.difficulty = Difficulty.MEDIUM;
-        game.setScreen(new GameScreen(game));
-    }
-
-    private void onHardClick() {
-        game.settings.difficulty = Difficulty.HARD;
-        game.setScreen(new GameScreen(game));
+    private void onStartClick() {
+        game.setScreen(new DifficultySelectScreen(game));
     }
 
     private void onSettingsClick() {
