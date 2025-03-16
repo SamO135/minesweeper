@@ -21,12 +21,18 @@ public class GameScreen extends GameMenuScreen {
         game.grid = grid;
 
         CustomButton pauseButton = createCustomButton("buttons/pause/pause_button.atlas", this::onPauseClick);
+        CustomButton resetButton = createCustomButton("buttons/reset/reset_button.atlas", this::onResetClick);
 
+        float taskbarYOffset = .035f;
+        float taskbarXOffset = .085f;
         Table table = new Table();
         table.setFillParent(true);
         table.add(pauseButton).width(pauseButton.getWidth() * .3f).height(pauseButton.getHeight() * .3f);
-        table.getCell(pauseButton).expand().top().left();
-        table.getCell(pauseButton).padLeft(uiViewport.getWorldWidth() * .1f).padTop(uiViewport.getWorldWidth() * .05f);
+        table.getCell(pauseButton);
+        table.add(resetButton).width(resetButton.getWidth() * .3f).height(resetButton.getHeight() * .3f);
+        table.getCell(resetButton).expandX().right().padRight(uiViewport.getWorldWidth() * taskbarXOffset);
+        table.top().left();
+        table.padLeft(uiViewport.getWorldWidth() * taskbarXOffset).padTop(uiViewport.getWorldWidth() * taskbarYOffset);
         stage.addActor(table);
     }
 
@@ -71,5 +77,9 @@ public class GameScreen extends GameMenuScreen {
 
     private void onPauseClick() {
         game.setScreen(new PauseScreen(game, this));
+    }
+
+    private void onResetClick() {
+        game.setScreen(new GameScreen(game));
     }
 }
