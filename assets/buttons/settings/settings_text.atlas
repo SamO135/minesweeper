@@ -2,6 +2,6 @@ settings_text.png
 size:1024,64
 repeat:none
 button_up
-bounds:260,2,256,32
-button_down
 bounds:2,2,256,32
+button_down
+bounds:260,2,256,32

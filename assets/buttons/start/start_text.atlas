@@ -1,7 +1,7 @@
 start_text.png
 size:512,64
 repeat:none
-button_down
-bounds:164,2,160,32
 button_up
 bounds:2,2,160,32
+button_down
+bounds:164,2,160,32
