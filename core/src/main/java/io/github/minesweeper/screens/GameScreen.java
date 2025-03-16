@@ -17,7 +17,7 @@ public class GameScreen extends GameMenuScreen {
         super(game);
         gameBatch = new SpriteBatch();
 
-        grid = new Grid(game.difficulty.width, game.difficulty.height, game.difficulty.mines, borderWidth);
+        grid = new Grid(game.settings.difficulty.width, game.settings.difficulty.height, game.settings.difficulty.mines, borderWidth);
         game.grid = grid;
 
         CustomButton pauseButton = createCustomButton("buttons/pause/pause_button.atlas", this::onPauseClick);

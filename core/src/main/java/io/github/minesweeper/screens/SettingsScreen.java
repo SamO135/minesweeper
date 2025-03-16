@@ -16,8 +16,8 @@ public class SettingsScreen extends MenuScreen {
 
     public SettingsScreen(MinesweeperGame game, MenuScreen menuScreen) {
         super(game);
-
         this.menuScreen = menuScreen;
+
         Texture menuTexture = new Texture(Gdx.files.internal("menu.png"));
         Image menuImage = new Image(new TextureRegionDrawable(new TextureRegion(menuTexture)));
         menuImage.setSize(uiWidth, uiHeight);
@@ -55,6 +55,9 @@ public class SettingsScreen extends MenuScreen {
 
         stage.addActor(menuImage);
         stage.addActor(buttonTable);
+
+        // match ui with the game settings
+        soundCheckbox.setChecked(!game.settings.muteSound);
     }
 
     @Override
@@ -62,7 +65,9 @@ public class SettingsScreen extends MenuScreen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void onSoundCheckboxClick() {}
+    private void onSoundCheckboxClick() {
+        game.settings.muteSound = !game.settings.muteSound;
+    }
 
     private void onBackClick() {
         game.setScreen(menuScreen);

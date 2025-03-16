@@ -1,5 +1,6 @@
 android/
 ios/
+assets/config.json
 
 ## Gradle:
 .gradle/
