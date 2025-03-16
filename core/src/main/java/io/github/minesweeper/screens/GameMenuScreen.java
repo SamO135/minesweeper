@@ -25,7 +25,7 @@ abstract class GameMenuScreen extends MenuScreen {
 
         // set up border size as a pecentage of grid size
         borderWidth = game.difficulty.width * .05f;
-        taskbarHeight = game.difficulty.height * 0.25f;
+        taskbarHeight = game.difficulty.height * 0.2f;
         gameWidth = gridWidth + borderWidth*2;
         gameHeight = gridHeight + borderWidth + taskbarHeight;
 
@@ -33,12 +33,6 @@ abstract class GameMenuScreen extends MenuScreen {
         gameCamera = new OrthographicCamera();
         gameCamera.setToOrtho(false, gameWidth, gameHeight);
         gameViewport = new FitViewport(gameWidth, gameHeight, gameCamera);
-
-        // set up ui viewport with same aspect ratio as game viewport
-//        float gameAspectRatio = gameHeight / gameWidth;
-//        uiCamera = new OrthographicCamera(100, 100);
-//        uiViewport = new FitViewport(100, 100, uiCamera);
-//        stage = new Stage(uiViewport);
 
         uiWidth = uiViewport.getWorldWidth();
         uiHeight = uiViewport.getWorldHeight();

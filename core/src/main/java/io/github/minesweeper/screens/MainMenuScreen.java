@@ -23,18 +23,20 @@ public class MainMenuScreen extends MenuScreen {
         CustomButton normalButton = createCustomButton("buttons/normal/normal_text.atlas", this::onNormalClick);
         CustomButton hardButton = createCustomButton("buttons/hard/hard_text.atlas", this::onHardClick);
 
+        float textSize = .05f; // relative to viewport size
+        float spacing = .1f; // relative to viewport size
         Table table = new Table();
         table.setFillParent(true);
         table.add(titleTextImage).width(uiWidth * .9f).height(uiHeight * .082f);
         table.getCell(titleTextImage).expand().top().padTop(uiHeight * .1f);
         table.row();
-        table.add(easyButton).width(uiWidth * .2f).height(uiHeight * .05f);
-        table.getCell(easyButton).padBottom(uiHeight * .05f);
+        table.add(easyButton).width(uiWidth * textSize * 4).height(uiHeight * textSize);
+        table.getCell(easyButton).padBottom(uiHeight * spacing);
         table.row();
-        table.add(normalButton).width(uiWidth * .3f).height(uiHeight * .05f);
-        table.getCell(normalButton).padBottom(uiHeight * .05f);
+        table.add(normalButton).width(uiWidth * textSize * 6).height(uiHeight * textSize);
+        table.getCell(normalButton).padBottom(uiHeight * spacing);
         table.row();
-        table.add(hardButton).width(uiWidth * .2f).height(uiHeight * .05f);
+        table.add(hardButton).width(uiWidth * textSize * 4).height(uiHeight * textSize);
         table.getCell(hardButton).padBottom(uiHeight * .2f);
 
         stage.addActor(table);

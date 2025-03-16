@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.minesweeper.game.Cell;
 import io.github.minesweeper.game.MinesweeperGame;
 import io.github.minesweeper.input.GameplayInputProcessor;
@@ -25,9 +24,9 @@ public class GameScreen extends GameMenuScreen {
 
         Table table = new Table();
         table.setFillParent(true);
-        table.add(pauseButton).width(pauseButton.getWidth() * .5f).height(pauseButton.getHeight() * .5f);
+        table.add(pauseButton).width(pauseButton.getWidth() * .3f).height(pauseButton.getHeight() * .3f);
         table.getCell(pauseButton).expand().top().left();
-        table.getCell(pauseButton).padLeft(uiViewport.getWorldWidth() * .12f).padTop(uiViewport.getWorldWidth() * .05f);
+        table.getCell(pauseButton).padLeft(uiViewport.getWorldWidth() * .1f).padTop(uiViewport.getWorldWidth() * .05f);
         stage.addActor(table);
     }
 
