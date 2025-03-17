@@ -2,8 +2,11 @@ package io.github.minesweeper.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.minesweeper.game.Cell;
 import io.github.minesweeper.game.MinesweeperGame;
 import io.github.minesweeper.input.GameplayInputProcessor;
@@ -17,22 +20,30 @@ public class GameScreen extends GameMenuScreen {
         super(game);
         gameBatch = new SpriteBatch();
 
+        uiCamera = new OrthographicCamera();
+        uiViewport = new FitViewport(gameWidth, gameHeight, uiCamera);
+
         grid = new Grid(game.settings.difficulty.width, game.settings.difficulty.height, game.settings.difficulty.mines, borderWidth);
         game.grid = grid;
 
         CustomButton pauseButton = createCustomButton("buttons/pause/pause_button.atlas", this::onPauseClick);
         CustomButton resetButton = createCustomButton("buttons/reset/reset_button.atlas", this::onResetClick);
 
-        float taskbarYOffset = .035f;
-        float taskbarXOffset = .085f;
+        stage = new Stage(uiViewport);
+        float buttonSize = .05f;
+
         Table table = new Table();
-        table.setFillParent(true);
-        table.add(pauseButton).width(pauseButton.getWidth() * .3f).height(pauseButton.getHeight() * .3f);
-        table.getCell(pauseButton);
-        table.add(resetButton).width(resetButton.getWidth() * .3f).height(resetButton.getHeight() * .3f);
-        table.getCell(resetButton).expandX().right().padRight(uiViewport.getWorldWidth() * taskbarXOffset);
+        table.setFillParent(false);
         table.top().left();
-        table.padLeft(uiViewport.getWorldWidth() * taskbarXOffset).padTop(uiViewport.getWorldWidth() * taskbarYOffset);
+        table.setSize(game.settings.difficulty.width, taskbarHeight);
+        table.setPosition(borderWidth, gameHeight - taskbarHeight-borderWidth);
+
+        Table taskBar = new Table();
+        taskBar.setFillParent(true);
+        taskBar.add(pauseButton).width(gameWidth * buttonSize).height(gameHeight * buttonSize).expandX().left();
+        taskBar.add(resetButton).width(gameWidth * buttonSize).height(gameHeight * buttonSize).expandX().right();
+
+        table.add(taskBar);
         stage.addActor(table);
     }
 
