@@ -12,7 +12,7 @@ public class Grid {
     private final int width;
     private final int height;
     private final int numMines;
-    private int cellsRevealed;
+    private int totalCellsRevealed;
     public boolean clickedMine;
     private final float gridOffset;
 
@@ -95,11 +95,11 @@ public class Grid {
     }
 
     /* Breadth First Search to reveal all connected cells that are not neighbouring a mine */
-    public void reveal(Cell clickedCell) {
+    public int reveal(Cell clickedCell) {
         if (clickedCell.isMine){
             clickedCell.reveal();
             clickedMine = true;
-            return;
+            return 1;
         }
 
         Cell nextCell;
@@ -107,11 +107,12 @@ public class Grid {
         boolean[][] visited = new boolean[width][height];
         queue.add(clickedCell);
         visited[(int)clickedCell.xIndex][(int)clickedCell.yIndex] = true;
+        int newCellsRevealed = 0;
 
         while (!queue.isEmpty()) {
             nextCell = queue.poll();
             nextCell.reveal();
-            cellsRevealed += 1;
+            newCellsRevealed++;
 
             if (nextCell.number == 0 && !nextCell.isMine) {
                 ArrayList<Cell> neighbours = getNeighbours(grid, nextCell);
@@ -123,6 +124,8 @@ public class Grid {
                 }
             }
         }
+        totalCellsRevealed += newCellsRevealed;
+        return newCellsRevealed;
     }
 
     public int getWidth() {
@@ -137,8 +140,8 @@ public class Grid {
         return grid;
     }
 
-    public int getCellsRevealed() {
-        return cellsRevealed;
+    public int getTotalCellsRevealed() {
+        return totalCellsRevealed;
     }
 
     public int getNumMines() {

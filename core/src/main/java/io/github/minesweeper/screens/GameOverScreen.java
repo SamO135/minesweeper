@@ -1,6 +1,7 @@
 package io.github.minesweeper.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -10,6 +11,7 @@ import io.github.minesweeper.game.MinesweeperGame;
 import io.github.minesweeper.ui.CustomButton;
 
 public class GameOverScreen extends GameMenuScreen {
+    private Sound gameOverSound;
 
     public GameOverScreen(MinesweeperGame game) {
         super(game);
@@ -30,6 +32,16 @@ public class GameOverScreen extends GameMenuScreen {
         table.getCell(playAgainButton).expand().bottom().padBottom(uiHeight * 0.2f);
         table.setFillParent(true);
         stage.addActor(table);
+
+        gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sfx/game_over.mp3"));
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        if (!game.prefs.getBoolean("muteSound", false)){
+            gameOverSound.play(1f);
+        }
     }
 
     private void onPlayAgainClick() {

@@ -20,12 +20,12 @@ abstract class GameMenuScreen extends MenuScreen {
         super(game);
         gameBatch = new SpriteBatch();
 
-        int gridWidth = game.settings.difficulty.width;
-        int gridHeight = game.settings.difficulty.height;
+        int gridWidth = game.difficulty.width;
+        int gridHeight = game.difficulty.height;
 
         // set up border size as a pecentage of grid size
-        borderWidth = game.settings.difficulty.width * .05f;
-        taskbarHeight = game.settings.difficulty.height * 0.2f;
+        borderWidth = game.difficulty.width * .05f;
+        taskbarHeight = game.difficulty.height * 0.2f;
         gameWidth = gridWidth + borderWidth*2;
         gameHeight = gridHeight + borderWidth + taskbarHeight;
 

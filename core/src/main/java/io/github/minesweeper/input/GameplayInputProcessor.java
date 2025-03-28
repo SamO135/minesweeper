@@ -1,7 +1,9 @@
 package io.github.minesweeper.input;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.minesweeper.game.Cell;
@@ -12,11 +14,19 @@ public class GameplayInputProcessor extends InputAdapter {
     private final FitViewport viewport;
     private final Grid grid;
     private final float gridOffset;
+    private final Sound cellRevealSound, multicellRevealSound, insertFlagSound, removeFlagSound;
+    private final MinesweeperGame game;
 
-    public GameplayInputProcessor(FitViewport viewport, Grid grid, float gridOffset) {
+    public GameplayInputProcessor(FitViewport viewport, Grid grid, float gridOffset, MinesweeperGame game) {
         this.viewport = viewport;
         this.grid = grid;
         this.gridOffset = gridOffset;
+        this.game = game;
+
+        cellRevealSound = Gdx.audio.newSound(Gdx.files.internal("sfx/cell_reveal.mp3"));
+        multicellRevealSound = Gdx.audio.newSound(Gdx.files.internal("sfx/multicell_reveal.mp3"));
+        insertFlagSound = Gdx.audio.newSound(Gdx.files.internal("sfx/flag.mp3"));
+        removeFlagSound = Gdx.audio.newSound(Gdx.files.internal("sfx/remove_flag.mp3"));
     }
 
     @Override
@@ -35,10 +45,31 @@ public class GameplayInputProcessor extends InputAdapter {
         switch (button) {
             case (Input.Buttons.LEFT):
                 if (!clickedCell.isRevealed){
-                    grid.reveal(clickedCell);
+                    int numCellsRevealed = grid.reveal(clickedCell);
+
+                    if (!game.prefs.getBoolean("muteSound", false)){
+                        if (numCellsRevealed == 1){
+                            cellRevealSound.play();
+                        }
+                        else {
+                            multicellRevealSound.play();
+                        }
+                    }
+
                 }
             case (Input.Buttons.RIGHT):
-                clickedCell.toggleFlag();
+                if (!clickedCell.isRevealed){
+                    clickedCell.toggleFlag();
+
+                    if (!game.prefs.getBoolean("muteSound", false)){
+                        if (clickedCell.isFlagged){
+                            insertFlagSound.play();
+                        }
+                        else {
+                            removeFlagSound.play();
+                        }
+                    }
+                }
         }
         return true;
     }

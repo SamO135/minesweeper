@@ -57,7 +57,7 @@ public class SettingsScreen extends MenuScreen {
         stage.addActor(buttonTable);
 
         // match ui with the game settings
-        soundCheckbox.setChecked(!game.settings.muteSound);
+        soundCheckbox.setChecked(!game.prefs.getBoolean("muteSound", false));
     }
 
     @Override
@@ -66,7 +66,8 @@ public class SettingsScreen extends MenuScreen {
     }
 
     private void onSoundCheckboxClick() {
-        game.settings.muteSound = !game.settings.muteSound;
+        boolean muteSound = game.prefs.getBoolean("muteSound", false);
+        game.prefs.putBoolean("muteSound", !muteSound);
     }
 
     private void onBackClick() {

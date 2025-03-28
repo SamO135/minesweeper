@@ -23,7 +23,7 @@ public class GameScreen extends GameMenuScreen {
         uiCamera = new OrthographicCamera();
         uiViewport = new FitViewport(gameWidth, gameHeight, uiCamera);
 
-        grid = new Grid(game.settings.difficulty.width, game.settings.difficulty.height, game.settings.difficulty.mines, borderWidth);
+        grid = new Grid(game.difficulty.width, game.difficulty.height, game.difficulty.mines, borderWidth);
         game.grid = grid;
 
         CustomButton pauseButton = createCustomButton("buttons/pause/pause_button.atlas", this::onPauseClick);
@@ -35,7 +35,7 @@ public class GameScreen extends GameMenuScreen {
         Table table = new Table();
         table.setFillParent(false);
         table.top().left();
-        table.setSize(game.settings.difficulty.width, taskbarHeight);
+        table.setSize(game.difficulty.width, taskbarHeight);
         table.setPosition(borderWidth, gameHeight - taskbarHeight-borderWidth);
 
         Table taskBar = new Table();
@@ -51,7 +51,7 @@ public class GameScreen extends GameMenuScreen {
     public void show() {
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(new GameplayInputProcessor(gameViewport, grid, borderWidth));
+        multiplexer.addProcessor(new GameplayInputProcessor(gameViewport, grid, borderWidth, game));
         Gdx.input.setInputProcessor(multiplexer);
     }
 
@@ -61,7 +61,7 @@ public class GameScreen extends GameMenuScreen {
             gameOver();
         }
 
-        if (grid.getCellsRevealed() >= (grid.getWidth() * grid.getHeight()) - grid.getNumMines()){
+        if (grid.getTotalCellsRevealed() >= (grid.getWidth() * grid.getHeight()) - grid.getNumMines()){
             gameWon();
         }
 

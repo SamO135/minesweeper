@@ -52,17 +52,17 @@ public class DifficultySelectScreen extends MenuScreen{
     }
 
     private void onEasyClick() {
-        game.settings.difficulty = Difficulty.EASY;
+        game.difficulty = Difficulty.EASY;
         game.setScreen(new GameScreen(game));
     }
 
     private void onNormalClick() {
-        game.settings.difficulty = Difficulty.MEDIUM;
+        game.difficulty = Difficulty.MEDIUM;
         game.setScreen(new GameScreen(game));
     }
 
     private void onHardClick() {
-        game.settings.difficulty = Difficulty.HARD;
+        game.difficulty = Difficulty.HARD;
         game.setScreen(new GameScreen(game));
     }
 

@@ -11,7 +11,7 @@ public class Cell {
     public int number;
     public boolean isMine;
     public boolean isRevealed;
-    private boolean isFlagged;
+    public boolean isFlagged;
     public final float xIndex, yIndex;
 
 

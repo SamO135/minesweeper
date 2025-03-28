@@ -77,12 +77,11 @@ abstract class MenuScreen implements Screen {
 
     public CustomButton createCustomButton(String atlasPath, ButtonClickHandler buttonClickHandler) {
         TextureAtlas buttonAtlas = new TextureAtlas(Gdx.files.internal(atlasPath));
-        return new CustomButton(buttonAtlas, buttonClickHandler);
+        return new CustomButton(buttonAtlas, buttonClickHandler, game);
     }
 
     public Checkbox createCheckbox(String atlasPath, ButtonClickHandler buttonClickHandler) {
         TextureAtlas buttonAtlas = new TextureAtlas(Gdx.files.internal(atlasPath));
         return new Checkbox(buttonAtlas, buttonClickHandler);
     }
-
 }
